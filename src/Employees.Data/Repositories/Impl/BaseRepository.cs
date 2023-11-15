@@ -40,10 +40,12 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
         }
 
         var entry = await _context.AddAsync(entity);
+        if (typeof(TEntity) == typeof(SystemLogEntity))
+        {
+            return null;
+        }
+
         var result = await LogEntry(entry, EventType.Update);
-
-        //await _context.SaveChangesAsync();
-
         return result;
     }
 
@@ -63,9 +65,6 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         var entry = _context.Update(entity);
         var result = await LogEntry(entry, EventType.Update);
-        
-        //await _context.SaveChangesAsync();
-
         return result;
     }
 
@@ -80,8 +79,6 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         entity.IsDeleted = true;
         _context.Update(entity);
-        
-        //awwait _context.SaveChangesAsync();
     }
 
     public virtual Task SaveAsync() => _context.SaveChangesAsync();

@@ -7,6 +7,7 @@ internal class DataContext : DbContext
 {
     public DbSet<EmployeeEntity> Employees { get; set; } = null!;
     public DbSet<CompanyEntity> Companies { get; set; } = null!;
+    public DbSet<SystemLogEntity> SystemLogs { get; set; } = null!;
 
     public DataContext(DbContextOptions<DataContext> options)
         : base(options)

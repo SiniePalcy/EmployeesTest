@@ -39,7 +39,7 @@ internal class CompanyMapper : BaseMapper<Company, CompanyEntity>
             Id = model.Id,
             Name = model.Name,
             CreatedAt = model.CreatedAt,
-            Employees = _employeeMapper.ToEntities(model.Employees).ToList()
+            Employees = _employeeMapper.ToEntities(model.Employees)?.ToList()
         };
     }
 }
