@@ -5,6 +5,7 @@ using Employees.Infrastructure.Exceptions;
 using Employees.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Employees.Data.Repositories.Impl;
 
@@ -40,12 +41,10 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
         }
 
         var entry = await _context.AddAsync(entity);
-        if (typeof(TEntity) == typeof(SystemLogEntity))
-        {
-            return null;
-        }
 
-        var result = await LogEntry(entry, EventType.Update);
+        await _context.SaveChangesAsync();
+
+        var result = await LogEntry(entry, EventType.Create);
         return result;
     }
 
@@ -91,11 +90,11 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
             Event = eventType,
         };
 
-        if (entry.State == EntityState.Added)
+        if (eventType == EventType.Create)
         {
             logEntity.ChangedProps = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
         }
-        else if (entry.State == EntityState.Modified)
+        else if (eventType == EventType.Update)
         {
             logEntity.ChangedProps = entry
                 .Properties
