@@ -30,11 +30,12 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
         var companies = _context
             .Companies
             .Include(x => x.Employees)
-            .Where(x => companyIds.Contains(x.Id));
+            .Where(x => companyIds.Contains(x.Id))
+            .ToList();
         if (!companies.Any())
         {
             throw new ObjectNotFoundException(
-                companyIds.Select(x => ("id" + x, (object)x)).ToList(), 
+                companyIds.Select(x => ("objectId_" + x, (object)x)).ToList(), 
                 typeof(CompanyEntity));
         }
 
@@ -42,7 +43,8 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
         SystemLog? result = null;
         foreach(var company in companies)
         {
-            if (!company.Employees!.Any(x => x.Title == model.Title))
+            var existingEmployee = company.Employees.FirstOrDefault(x => x.Title == model.Title);
+            if (existingEmployee is null)
             {
                 if (!addedEntry)
                 {
