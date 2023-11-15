@@ -41,18 +41,28 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
 
         bool addedEntry = false;
         SystemLog? result = null;
+        EmployeeEntity addedEmployee = null;
         foreach(var company in companies)
         {
-            var existingEmployee = company.Employees.FirstOrDefault(x => x.Title == model.Title);
+            var existingEmployee = company
+                .Employees?
+                .FirstOrDefault(x => x.Title == model.Title);
             if (existingEmployee is null)
             {
                 if (!addedEntry)
                 {
                     result = await base.AddAsync(model);
+                    addedEmployee = _context.Find<EmployeeEntity>(int.Parse(result.ChangeSet["Id"]));
                     addedEntry = true;
                 }
 
-                company.Employees!.Add(_mapper.ToEntity(model)!);
+                if (company.Employees is null)
+                {
+                    company.Employees = new List<EmployeeEntity>();
+                }
+
+                company.Employees.Add(addedEmployee!);
+                _context.Update(company);
             }
         }
 
@@ -60,6 +70,8 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
         {
             throw new Exception($"Employee can't be added: all companies already have the employee '{model.Title}'");
         }
+
+        await _context.SaveChangesAsync();
 
         return result;
     }
