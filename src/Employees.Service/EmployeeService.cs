@@ -22,8 +22,6 @@ public class EmployeeService : IEmployeeService
             Email = request.Employee.Email,
         }, request.Employee.CompanyIds)!;
 
-        await _employeeRepository.SaveAsync();
-
         return result;
     }
 }

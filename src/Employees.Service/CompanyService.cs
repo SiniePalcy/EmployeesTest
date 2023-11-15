@@ -19,8 +19,6 @@ public class CompanyService : ICompanyService
             Name = request.Company.Name,
         });
 
-        await _companyRepository.SaveAsync();
-
         return systemLog;
     }
 }
