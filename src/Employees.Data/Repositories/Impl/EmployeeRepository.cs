@@ -19,9 +19,9 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
 
     public async Task<SystemLog?> AddAsync(Employee model, List<int> companyIds)
     {
-        var existingUser = await _context
+        var existingUser = _context
             .Employees
-            .FirstOrDefaultAsync(x => x.Email == model.Email);
+            .FirstOrDefault(x => x.Email == model.Email);
         if (existingUser is not null)
         {
             throw new ObjectAlreadyExistsException("email", existingUser.Email, typeof(EmployeeEntity));
