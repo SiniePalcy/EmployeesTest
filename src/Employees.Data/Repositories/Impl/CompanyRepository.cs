@@ -4,17 +4,22 @@ using Employees.Data.Mapping;
 using Employees.Domain.Model;
 using Employees.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Employees.Data.Repositories.Impl;
 
 internal class CompanyRepository : BaseRepository<Company, CompanyEntity>, ICompanyRepository
 {
+    private readonly IEmployeeRepository _employeeRepository;
     public CompanyRepository(
         DataContext context,
         IMapper<Company, CompanyEntity> mapper,
-        IMapper<SystemLog, SystemLogEntity> systemLogMapper)
+        IMapper<SystemLog, SystemLogEntity> systemLogMapper,
+        IEmployeeRepository employeeRepository)
         : base(context, mapper, systemLogMapper, Shared.Enums.ResourceType.Company)
-    { }
+    {
+        _employeeRepository = employeeRepository;
+    }
 
     public override Task<IEnumerable<Company>> GetAsync(List<int>? ids = null)
     {
@@ -42,6 +47,17 @@ internal class CompanyRepository : BaseRepository<Company, CompanyEntity>, IComp
             throw new ObjectAlreadyExistsException("name", model.Name, typeof(CompanyEntity));
         }
 
-        return await base.AddAsync(model);
+        var result =  await base.AddAsync(model);
+        int id = int.Parse(result.ChangeSet["Id"]);
+
+        if (model.Employees is not null)
+        {
+            foreach(var employeeModel in model.Employees)
+            {
+                await _employeeRepository.AddAsync(employeeModel, new List<int> { id });
+            }
+        }
+
+        return result;
     }
 }
