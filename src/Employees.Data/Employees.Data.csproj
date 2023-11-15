@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.EF6" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Employees.Data.Contract\Employees.Data.Contract.csproj" />
+    <ProjectReference Include="..\Employees.Infrastructure.Serialization\Employees.Infrastructure.csproj" />
+    <ProjectReference Include="..\Employees.Model\Employees.Model\Employees.Domain.Model.csproj" />
+  </ItemGroup>
+
+</Project>

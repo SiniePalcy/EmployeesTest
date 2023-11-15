@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  employees.api:
+    image: ${DOCKER_REGISTRY-}employeesapi
+    container_name: employees.api
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: src/Employees.API/Dockerfile
+
+  postgres:
+    image: postgres:15.2
+    container_name: employees-postgres-db
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "10"
+    ports:
+      - 5439:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: employeestest 

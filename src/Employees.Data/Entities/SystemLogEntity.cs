@@ -1,8 +1,8 @@
 ﻿using Employees.Shared.Enums;
 
-namespace Employees.Domain.Model;
+namespace Employees.Data.Entities;
 
-public class SystemLog : BaseObject
+internal class SystemLogEntity : BaseEntity
 {
     public ResourceType ResourceType { get; set; }
     public EventType Event { get; set; }

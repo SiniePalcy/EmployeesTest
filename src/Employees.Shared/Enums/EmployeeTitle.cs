@@ -1,4 +1,4 @@
-﻿namespace Employees.Doman.Model.Enums;
+﻿namespace Employees.Shared.Enums;
 
 public enum EmployeeTitle : byte
 {

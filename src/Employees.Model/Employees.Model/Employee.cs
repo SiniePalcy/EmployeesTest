@@ -1,8 +1,8 @@
-﻿using Employees.Doman.Model.Enums;
+﻿using Employees.Shared.Enums;
 
-namespace Employees.Model;
+namespace Employees.Domain.Model;
 
-public class Employee
+public class Employee : BaseObject
 {
     public EmployeeTitle Title { get; set; }
     public string Email { get; set; } = default!;

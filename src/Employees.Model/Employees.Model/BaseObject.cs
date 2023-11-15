@@ -1,4 +1,4 @@
-﻿namespace Employees.Doman.Model;
+﻿namespace Employees.Domain.Model;
 
 public class BaseObject
 {
