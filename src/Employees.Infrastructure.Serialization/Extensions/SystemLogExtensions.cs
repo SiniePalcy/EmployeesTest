@@ -7,7 +7,7 @@ public static class SystemLogExtensions
 {
     public static IdResponse FormIdResponse(this SystemLog self)
     {
-        var id = (int)self.ChangeSet["Id"];
+        var id = int.Parse(self.ChangeSet["Id"]);
         return new IdResponse
         {
             Id = id,

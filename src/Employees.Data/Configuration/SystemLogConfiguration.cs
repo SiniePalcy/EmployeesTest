@@ -24,10 +24,10 @@ internal class SystemLogConfiguration : BaseConfiguration<SystemLogEntity>
             .Property(x => x.Event)
             .HasConversion<string>();
 
-        builder.Property(e => e.ChangeSet)
+        builder.Property(e => e.ChangedProps)
             .HasConversion(
                 v => _serializer.Serialize(v),
-                v => _serializer.Deserialize<Dictionary<string, object>>(v!)!
+                v => _serializer.Deserialize<Dictionary<string, string>>(v!)!
             );
     }
 }

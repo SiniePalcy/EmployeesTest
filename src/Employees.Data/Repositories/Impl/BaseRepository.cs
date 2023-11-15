@@ -93,14 +93,14 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         if (entry.State == EntityState.Added)
         {
-            logEntity.ChangeSet = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue)!;
+            logEntity.ChangedProps = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
         }
         else if (entry.State == EntityState.Modified)
         {
-            logEntity.ChangeSet = entry
+            logEntity.ChangedProps = entry
                 .Properties
                 .Where(x => x.OriginalValue != null && x.OriginalValue.Equals(x.CurrentValue))
-                .ToDictionary(x => x.Metadata.Name, x => x.CurrentValue)!;
+                .ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
         }
 
         var logEntry = await _context.AddAsync(logEntity);

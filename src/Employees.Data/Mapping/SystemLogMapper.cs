@@ -17,7 +17,7 @@ internal class SystemLogMapper : BaseMapper<SystemLog, SystemLogEntity>
             Id = model.Id,
             ResourceType = model.ResourceType,
             Event = model.Event,
-            ChangeSet = model.ChangeSet,
+            ChangedProps = model.ChangeSet,
             Comment = model.Comment,
         };
     }
@@ -34,7 +34,7 @@ internal class SystemLogMapper : BaseMapper<SystemLog, SystemLogEntity>
             Id = entity.Id,
             ResourceType = entity.ResourceType,
             Event = entity.Event,
-            ChangeSet = entity.ChangeSet,
+            ChangeSet = entity.ChangedProps,
             Comment = entity.Comment,
         };
     }
