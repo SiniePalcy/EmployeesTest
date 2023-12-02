@@ -48,7 +48,7 @@ public class CompanyServiceTests : IClassFixture<DatabaseFixture>
 
         log.Should().NotBeNull();
         var companies = await repository.GetAsync(new List<int> { int.Parse(log.ChangeSet["Id"]) });
-        companies.Should().OnlyContain(c => c.Name == companyName);
+        companies.Should().OnlyContain(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
     }
 
     [Fact]

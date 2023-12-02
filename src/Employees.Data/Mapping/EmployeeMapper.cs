@@ -33,7 +33,7 @@ internal class EmployeeMapper : BaseMapper<Employee, EmployeeEntity>
             Id = model.Id,
             Title = model.Title,
             Email = model.Email,
-            CreatedAt = model.CreatedAt,
+            CreatedAt = model.CreatedAt ?? DateTimeOffset.Now,
         };
     }
 }

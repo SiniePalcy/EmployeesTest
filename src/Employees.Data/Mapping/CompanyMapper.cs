@@ -38,7 +38,7 @@ internal class CompanyMapper : BaseMapper<Company, CompanyEntity>
         {
             Id = model.Id,
             Name = model.Name,
-            CreatedAt = model.CreatedAt,
+            CreatedAt = model.CreatedAt ?? DateTimeOffset.Now,
             Employees = _employeeMapper.ToEntities(model.Employees)?.ToList()
         };
     }

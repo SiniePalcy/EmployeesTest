@@ -6,6 +6,6 @@ internal class SystemLogEntity : BaseEntity
 {
     public ResourceType ResourceType { get; set; }
     public EventType Event { get; set; }
-    public Dictionary<string, string> ChangedProps { get; set; } = default!;
+    public Dictionary<string, string> ChangeSet { get; set; } = default!;
     public string? Comment { get; set; }
 }

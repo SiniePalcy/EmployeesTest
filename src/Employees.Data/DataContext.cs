@@ -45,7 +45,7 @@ internal class DataContext : DbContext
         {
             if (entityEntry.State == EntityState.Added)
             {
-                ((BaseEntity)entityEntry.Entity).CreatedAt = DateTimeOffset.Now;
+                ((BaseEntity)entityEntry.Entity).CreatedAt = DateTimeOffset.UtcNow;
             }
         }
     }

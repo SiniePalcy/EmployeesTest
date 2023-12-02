@@ -87,17 +87,19 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         if (eventType == EventType.Create)
         {
-            logEntity.ChangedProps = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
+            logEntity.ChangeSet = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
         }
         else if (eventType == EventType.Update)
         {
-            logEntity.ChangedProps = entry
+            logEntity.ChangeSet = entry
                 .Properties
                 .Where(x => x.OriginalValue != null && x.OriginalValue.Equals(x.CurrentValue))
                 .ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
         }
 
         var logEntry = await _context.AddAsync(logEntity);
+
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<SystemLog>(logEntry.Entity)!;
     }
