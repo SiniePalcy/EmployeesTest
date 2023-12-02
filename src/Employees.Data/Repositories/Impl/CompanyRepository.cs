@@ -1,10 +1,9 @@
-﻿using Employees.Data.Contract;
+﻿using AutoMapper;
+using Employees.Data.Contract;
 using Employees.Data.Entities;
-using Employees.Data.Mapping;
 using Employees.Domain.Model;
 using Employees.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace Employees.Data.Repositories.Impl;
 
@@ -13,10 +12,9 @@ internal class CompanyRepository : BaseRepository<Company, CompanyEntity>, IComp
     private readonly IEmployeeRepository _employeeRepository;
     public CompanyRepository(
         DataContext context,
-        IMapper<Company, CompanyEntity> mapper,
-        IMapper<SystemLog, SystemLogEntity> systemLogMapper,
+        IMapper mapper,
         IEmployeeRepository employeeRepository)
-        : base(context, mapper, systemLogMapper, Shared.Enums.ResourceType.Company)
+        : base(context, mapper, Shared.Enums.ResourceType.Company)
     {
         _employeeRepository = employeeRepository;
     }
@@ -25,14 +23,14 @@ internal class CompanyRepository : BaseRepository<Company, CompanyEntity>, IComp
     {
         if (ids is null)
         {
-            return Task.FromResult(_context.Companies.Select(_mapper.ToModel))!;
+            return Task.FromResult(_context.Companies.Select(_mapper.Map<Company>))!;
         }
         else
         {
             return Task.FromResult(_context
                 .Companies
                 .Where(x => ids.Contains(x.Id))
-                .Select(_mapper.ToModel))!;
+                .Select(_mapper.Map<Company>))!;
         }
     }
 

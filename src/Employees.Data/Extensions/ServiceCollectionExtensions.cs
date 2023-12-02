@@ -1,4 +1,5 @@
-﻿using Employees.Data.Contract;
+﻿using AutoMapper;
+using Employees.Data.Contract;
 using Employees.Data.Entities;
 using Employees.Data.Mapping;
 using Employees.Data.Repositories;
@@ -40,7 +41,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection RegisterRepositories(this IServiceCollection self)
     {
-        self.RegisterMappers();
+        self.RegisterAutomapper();
         self.AddScoped<IEmployeeRepository, EmployeeRepository>();
         self.AddScoped<ICompanyRepository, CompanyRepository>();
         return self;
@@ -63,4 +64,11 @@ public static class ServiceCollectionExtensions
 
         return self;
     }
+
+    private static IServiceCollection RegisterAutomapper(this IServiceCollection self)
+    {
+        self.AddAutoMapper(typeof(MappingProfile));
+        return self;
+    }
+   
 }

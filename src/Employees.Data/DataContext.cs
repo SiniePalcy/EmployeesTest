@@ -1,5 +1,8 @@
 ﻿using Employees.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Employees.Services.Tests")]
 
 namespace Employees.Data;
 

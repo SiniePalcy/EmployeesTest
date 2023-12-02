@@ -1,11 +1,9 @@
-﻿using Employees.Data.Entities;
-using Employees.Data.Mapping;
+﻿using AutoMapper;
+using Employees.Data.Entities;
 using Employees.Domain.Model;
 using Employees.Infrastructure.Exceptions;
 using Employees.Shared.Enums;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Employees.Data.Repositories.Impl;
 
@@ -14,19 +12,16 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
     where TEntity : BaseEntity
 {
     protected readonly DataContext _context;
-    protected readonly IMapper<TModel, TEntity> _mapper;
-    protected readonly IMapper<SystemLog, SystemLogEntity> _logEntityMapper;
     protected readonly ResourceType _resourceType;
+    protected readonly IMapper _mapper;
 
     public BaseRepository(
         DataContext dataContext,
-        IMapper<TModel, TEntity> mapper,
-        IMapper<SystemLog, SystemLogEntity> logEntityMapper,
+        IMapper mapper,
         ResourceType resourceType)
     {
         _context = dataContext;
         _mapper = mapper;
-        _logEntityMapper = logEntityMapper;
         _resourceType = resourceType;
     }
 
@@ -34,7 +29,7 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
     public virtual async Task<SystemLog> AddAsync(TModel model)
     {
-        var entity = _mapper.ToEntity(model);
+        var entity = _mapper.Map<TEntity>(model);
         if (entity is null)
         {
             throw new NullReferenceException($"Entity '{typeof(TEntity)}' is null");
@@ -50,7 +45,7 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
     public virtual async Task<SystemLog> UpdateAsync(TModel model)
     {
-        var entity = _mapper.ToEntity(model);
+        var entity = _mapper.Map<TEntity>(model);
         if (entity is null)
         {
             throw new NullReferenceException($"Entity '{typeof(TEntity)}' is null");
@@ -104,7 +99,7 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         var logEntry = await _context.AddAsync(logEntity);
 
-        return _logEntityMapper.ToModel(logEntry.Entity)!;
+        return _mapper.Map<SystemLog>(logEntry.Entity)!;
     }
 
 

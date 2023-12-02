@@ -1,4 +1,5 @@
-﻿using Employees.Data.Contract;
+﻿using AutoMapper;
+using Employees.Data.Contract;
 using Employees.Data.Entities;
 using Employees.Data.Mapping;
 using Employees.Domain.Model;
@@ -11,9 +12,8 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
 {
     public EmployeeRepository(
         DataContext context,
-        IMapper<Employee, EmployeeEntity> mapper,
-        IMapper<SystemLog, SystemLogEntity> systemLogMapper)
-        : base(context, mapper, systemLogMapper, Shared.Enums.ResourceType.Employee)
+        IMapper mapper)
+        : base(context, mapper, Shared.Enums.ResourceType.Employee)
     {
     }
 
@@ -80,14 +80,14 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
     {
         if (ids is null)
         {
-            return Task.FromResult(_context.Employees.Select(_mapper.ToModel))!;
+            return Task.FromResult(_context.Employees.Select(_mapper.Map<Employee>))!;
         }
         else
         {
             return Task.FromResult(_context
                 .Employees
                 .Where(x => ids.Contains(x.Id))
-                .Select(_mapper.ToModel))!;
+                .Select(_mapper.Map<Employee>))!;
         }
         
     }

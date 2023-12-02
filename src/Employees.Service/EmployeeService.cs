@@ -3,14 +3,19 @@ using Employees.Domain.Model;
 using Employees.Shared.Enums;
 using Employees.Shared.Model;
 using Employees.Shared.Requests;
+using Microsoft.Extensions.Logging;
 
 namespace Employees.Services.Contract;
 
 public class EmployeeService : IEmployeeService
 {
+    private readonly ILogger<EmployeeService> _logger; 
     private readonly IEmployeeRepository _employeeRepository;
-    public EmployeeService(IEmployeeRepository employeeRepository)
+    public EmployeeService(
+        ILogger<EmployeeService> logger,
+        IEmployeeRepository employeeRepository)
     {
+        _logger = logger;
         _employeeRepository = employeeRepository;
     }
 
@@ -21,6 +26,8 @@ public class EmployeeService : IEmployeeService
             Title = Enum.Parse<EmployeeTitle>(request.Employee.Title, true),
             Email = request.Employee.Email,
         }, request.Employee.CompanyIds)!;
+
+        _logger.LogInformation($"Added new Employee: {{ Id: {result.ChangeSet["Id"]} }}");
 
         return result;
     }

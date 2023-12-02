@@ -2,14 +2,19 @@
 using Employees.Domain.Model;
 using Employees.Shared.Enums;
 using Employees.Shared.Requests;
+using Microsoft.Extensions.Logging;
 
 namespace Employees.Services.Contract;
 
 public class CompanyService : ICompanyService
 {
+    private readonly ILogger<CompanyService> _logger;
     private readonly ICompanyRepository _companyRepository;
-    public CompanyService(ICompanyRepository companyRepository)
+    public CompanyService(
+        ILogger<CompanyService> logger, 
+        ICompanyRepository companyRepository)
     {
+        _logger = logger;
         _companyRepository = companyRepository;
     }
 
@@ -24,6 +29,8 @@ public class CompanyService : ICompanyService
                  Title = Enum.Parse<EmployeeTitle>(x.Title, true)
             })?.ToList(),
         });
+
+        _logger.LogInformation($"Added new Company: {{ Id: {systemLog.ChangeSet["Id"]} }}");
 
         return systemLog;
     }
