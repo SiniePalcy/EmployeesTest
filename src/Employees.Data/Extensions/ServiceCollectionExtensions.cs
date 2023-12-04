@@ -1,16 +1,11 @@
-﻿using AutoMapper;
-using Employees.Data.Contract;
-using Employees.Data.Entities;
+﻿using Employees.Data.Contract;
 using Employees.Data.Mapping;
-using Employees.Data.Repositories;
 using Employees.Data.Repositories.Impl;
 using Employees.Data.Services;
-using Employees.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 
 namespace Employees.Data.Extensions;
 
@@ -44,24 +39,6 @@ public static class ServiceCollectionExtensions
         self.RegisterAutomapper();
         self.AddScoped<IEmployeeRepository, EmployeeRepository>();
         self.AddScoped<ICompanyRepository, CompanyRepository>();
-        return self;
-    }
-
-    private static IServiceCollection RegisterMappers(this IServiceCollection self)
-    {
-        var mapperTypes = Assembly.GetExecutingAssembly()
-            .GetTypes()
-            .Where(type =>
-                type.IsClass &&
-                !type.IsAbstract &&
-                type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapper<,>)))
-            .ToList();
-        
-        foreach (var mapperType in mapperTypes)
-        {
-            self.AddSingleton(mapperType.GetInterfaces().First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapper<,>)), mapperType);
-        }
-
         return self;
     }
 

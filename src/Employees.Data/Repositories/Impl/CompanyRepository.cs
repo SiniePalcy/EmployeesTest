@@ -46,16 +46,6 @@ internal class CompanyRepository : BaseRepository<Company, CompanyEntity>, IComp
         }
 
         var result =  await base.AddAsync(model);
-        int id = int.Parse(result.ChangeSet["Id"]);
-
-        if (model.Employees is not null)
-        {
-            foreach(var employeeModel in model.Employees)
-            {
-                await _employeeRepository.AddAsync(employeeModel, new List<int> { id });
-            }
-        }
-
         return result;
     }
 }

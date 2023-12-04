@@ -39,6 +39,8 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         await _context.SaveChangesAsync();
 
+        entry.State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+
         var result = await LogEntry(entry, EventType.Create);
         return result;
     }

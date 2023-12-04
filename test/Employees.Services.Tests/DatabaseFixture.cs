@@ -20,7 +20,7 @@ public class DatabaseFixture : IDisposable
         var hostEnvironmentMock = new Mock<IHostEnvironment>();
         hostEnvironmentMock
             .Setup(x => x.EnvironmentName)
-            .Returns("Development");
+            .Returns(Environments.Development);
 
         var services = new ServiceCollection();
         services.AddSingleton(hostEnvironmentMock.Object);

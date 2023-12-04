@@ -1,20 +1,18 @@
-﻿using Employees.Shared.Requests;
+﻿using Employees.Shared.Model;
+using Employees.Shared.Requests;
 using FluentValidation;
 
 namespace Employees.API.Validation;
 
 public class AddCompanyRequestValidator : AbstractValidator<AddCompanyRequest>
 {
-    public AddCompanyRequestValidator()
+    public AddCompanyRequestValidator(IValidator<CompanyDto> companyValidator)
     {
         RuleFor(x => x.Company)
             .NotNull()
-            .WithMessage("Company can't be empty")
-            .DependentRules(() =>
-            {
-                RuleFor(x => x.Company.Name)
-                    .NotEmpty()
-                    .WithMessage("Company name can't be empty");
-            });
+            .WithMessage("Company can't be empty");
+
+        RuleFor(x => x.Company)
+            .SetValidator(companyValidator);
     }
 }
