@@ -1,18 +1,18 @@
 using Employees.Data;
 using Employees.Data.Contract;
-using Employees.Data.Repositories;
 using Employees.Domain.Model;
 using Employees.Services.Contract;
 using Employees.Services.Extensions;
+using Employees.Services.Tests.TestContext;
 using Employees.Shared.Enums;
 using Employees.Shared.Requests;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Employees.Services.Tests;
 
-public class CompanyServiceTests : IClassFixture<DatabaseFixture>
+[Collection(CollectionNames.MainCollection)]
+public class CompanyServiceTests
 {
     private readonly DatabaseFixture _fixture;
     private readonly ServiceProvider _serviceProvider;
@@ -36,7 +36,7 @@ public class CompanyServiceTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task AddEmptyCompanyTest_ShouldBePassed()
     {
-        string companyName = "Horns and Hooves";
+        string companyName = "Foo";
         AddCompanyRequest request = new()
         {
             Company = new()
@@ -60,7 +60,7 @@ public class CompanyServiceTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task AddCompanyWithEmployess_ShouldBePassed()
     {
-        string companyName = "Horns and Hooves";
+        string companyName = "Foo";
         var request = new AddCompanyRequest
         {
             Company = new()

@@ -5,7 +5,7 @@ using Moq;
 using Employees.Data.Extensions;
 using Employees.Data;
 
-namespace Employees.Services.Tests;
+namespace Employees.Services.Tests.TestContext;
 
 public class DatabaseFixture : IDisposable
 {

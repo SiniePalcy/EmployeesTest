@@ -1,6 +1,5 @@
 using Employees.Data;
 using Employees.Data.Contract;
-using Employees.Data.Repositories;
 using Employees.Infrastructure.Exceptions;
 using Employees.Services.Contract;
 using Employees.Services.Extensions;
@@ -9,10 +8,12 @@ using Employees.Shared.Requests;
 using Employees.Domain.Model;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Employees.Services.Tests.TestContext;
 
 namespace Employees.Services.Tests;
 
-public class EmployeeServiceTests : IClassFixture<DatabaseFixture>
+[Collection(CollectionNames.MainCollection)]
+public class EmployeeServiceTests 
 {
     private readonly DatabaseFixture _fixture;
     private readonly ServiceProvider _serviceProvider;
