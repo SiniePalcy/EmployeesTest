@@ -8,7 +8,7 @@ namespace Employees.API.Controllers
     [Route("employees")]
     public class EmployeesController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
 
         public EmployeesController(IMediator mediator)
         {

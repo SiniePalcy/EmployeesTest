@@ -6,7 +6,6 @@ namespace Employees.Data.Contract;
 public interface IEmployeeRepository
 {
     Task<SystemLog?> AddAsync(Employee model, List<int> companyIds);
-    //Task<SystemLog> AddAsync(Employee model);
     Task<SystemLog> UpdateAsync(Employee model);
     Task DeleteAsync(int id);
     Task<IEnumerable<Employee>> GetAsync(List<int>? ids = null);

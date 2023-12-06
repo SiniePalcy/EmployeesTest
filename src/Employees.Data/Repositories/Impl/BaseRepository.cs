@@ -29,12 +29,8 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
     public virtual async Task<SystemLog> AddAsync(TModel model)
     {
-        var entity = _mapper.Map<TEntity>(model);
-        if (entity is null)
-        {
-            throw new NullReferenceException($"Entity '{typeof(TEntity)}' is null");
-        }
-
+        var entity = _mapper.Map<TEntity>(model) 
+            ?? throw new NullReferenceException($"Entity '{typeof(TEntity)}' is null");
         var entry = await _context.AddAsync(entity);
 
         await _context.SaveChangesAsync();
@@ -47,18 +43,10 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
     public virtual async Task<SystemLog> UpdateAsync(TModel model)
     {
-        var entity = _mapper.Map<TEntity>(model);
-        if (entity is null)
-        {
-            throw new NullReferenceException($"Entity '{typeof(TEntity)}' is null");
-        }
-
-        var existingEntity = await _context.FindAsync<TEntity>(model.Id);
-        if (existingEntity is null)
-        {
-            throw new ObjectNotFoundException(model.Id, typeof(TEntity));
-        }
-
+        var entity = _mapper.Map<TEntity>(model) 
+            ?? throw new NullReferenceException($"Entity '{typeof(TEntity)}' is null");
+        _ = await _context.FindAsync<TEntity>(model.Id)
+            ?? throw new ObjectNotFoundException(model.Id, typeof(TEntity));
         var entry = _context.Update(entity);
         var result = await LogEntry(entry, EventType.Update);
         return result;
@@ -67,12 +55,8 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
     public virtual async Task DeleteAsync(int id)
     {
-        var entity = await _context.FindAsync<TEntity>(id);
-        if (entity is null)
-        {
-            throw new ObjectNotFoundException(id, typeof(TEntity));
-        }
-
+        var entity = await _context.FindAsync<TEntity>(id) 
+            ?? throw new ObjectNotFoundException(id, typeof(TEntity));
         entity.IsDeleted = true;
         _context.Update(entity);
     }
@@ -89,14 +73,14 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
 
         if (eventType == EventType.Create)
         {
-            logEntity.ChangeSet = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
+            logEntity.ChangeSet = entry.Properties.ToDictionary(x => x.Metadata.Name, x => x.CurrentValue!.ToString())!;
         }
         else if (eventType == EventType.Update)
         {
             logEntity.ChangeSet = entry
                 .Properties
                 .Where(x => x.OriginalValue != null && x.OriginalValue.Equals(x.CurrentValue))
-                .ToDictionary(x => x.Metadata.Name, x => x.CurrentValue.ToString())!;
+                .ToDictionary(x => x.Metadata.Name, x => x.CurrentValue!.ToString())!;
         }
 
         var logEntry = await _context.AddAsync(logEntity);

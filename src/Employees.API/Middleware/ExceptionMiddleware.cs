@@ -36,14 +36,14 @@ public class ExceptionMiddleware : IMiddleware
         await context.Response.WriteAsJsonAsync(errorResponse);
     }
 
-    private ErrorResponse ConstructExceptionResponse(Exception ex, bool useStackTrace = false)
+    private static ErrorResponse ConstructExceptionResponse(Exception ex, bool useStackTrace = false)
     {
         while (ex.InnerException != null)
         {
             ex = ex.InnerException;
         }
 
-        ErrorResponse errorResponse = new ErrorResponse
+        ErrorResponse errorResponse = new()
         {
             Message = ex.Message
         };

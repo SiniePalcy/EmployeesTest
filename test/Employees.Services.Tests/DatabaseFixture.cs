@@ -37,10 +37,27 @@ public class DatabaseFixture : IDisposable
         context.Database.EnsureCreated();
     }
 
+    #region IDisposable pattern
+    private bool _disposedValue;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                var context = ServiceProvider.GetRequiredService<DataContext>();
+                context.Database.EnsureDeleted();
+                context.Dispose();
+            }
+
+            _disposedValue = true;
+        }
+    }
+
     public void Dispose()
     {
-        var context = ServiceProvider.GetRequiredService<DataContext>();
-        context.Database.EnsureDeleted();
-        context.Dispose();
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
+    #endregion
 }

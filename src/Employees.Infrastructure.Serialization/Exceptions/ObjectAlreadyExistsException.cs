@@ -10,7 +10,6 @@ public class ObjectAlreadyExistsException : Exception
 
     public override string ToString()
     {
-
         return base.ToString();
     }
 }

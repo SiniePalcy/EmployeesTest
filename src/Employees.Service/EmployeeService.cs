@@ -27,7 +27,7 @@ public class EmployeeService : IEmployeeService
             Email = request.Employee.Email,
         }, request.Employee.CompanyIds)!;
 
-        _logger.LogInformation($"Added new Employee: {{ Id: {result.ChangeSet["Id"]} }}");
+        _logger.LogInformation($"Added new Employee: {{ Id: {result!.ChangeSet["Id"]} }}");
 
         return result;
     }

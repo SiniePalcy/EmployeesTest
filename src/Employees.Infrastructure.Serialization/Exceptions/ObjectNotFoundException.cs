@@ -11,9 +11,9 @@ public class ObjectNotFoundException : Exception
     public ObjectNotFoundException(IList<(string Key, object Value)> data, Type type)
         : base($"Object of type '{type}' is not found with keys: {string.Join(',', data.Select(x => $"{x.Key} = {x.Value}"))}")
     {
-        foreach(var pair in data)
+        foreach(var (Key, Value) in data)
         {
-            Data.Add(pair.Key, pair.Value);
+            Data.Add(Key, Value);
         }
         
     }

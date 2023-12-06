@@ -41,7 +41,7 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
 
         bool addedEntry = false;
         SystemLog? result = null;
-        EmployeeEntity addedEmployee = null;
+        EmployeeEntity? addedEmployee = null;
         foreach(var company in companies)
         {
             var existingEmployee = company
@@ -56,10 +56,7 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
                     addedEntry = true;
                 }
 
-                if (company.Employees is null)
-                {
-                    company.Employees = new List<EmployeeEntity>();
-                }
+                company.Employees ??= new List<EmployeeEntity>();
 
                 company.Employees.Add(addedEmployee!);
                 _context.Update(company);
