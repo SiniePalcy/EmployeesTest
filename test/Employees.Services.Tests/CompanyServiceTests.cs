@@ -1,6 +1,7 @@
 using Employees.Data;
 using Employees.Data.Contract;
 using Employees.Data.Repositories;
+using Employees.Domain.Model;
 using Employees.Services.Contract;
 using Employees.Services.Extensions;
 using Employees.Shared.Enums;
@@ -49,7 +50,7 @@ public class CompanyServiceTests : IClassFixture<DatabaseFixture>
 
         var log = await service.AddCompanyAsync(request);
         
-        int addedId = int.Parse(log.ChangeSet["Id"]);
+        int addedId = log.GetId();
         var companies = await repository.GetAsync(new() { addedId });
         companies.Should().OnlyContain(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
 
@@ -88,7 +89,7 @@ public class CompanyServiceTests : IClassFixture<DatabaseFixture>
 
         var log = await service.AddCompanyAsync(request);
 
-        int addedId = int.Parse(log.ChangeSet["Id"]);
+        int addedId = log.GetId();
         var companies = await companyRepository.GetAsync();
         companies.Should().HaveCount(1);
         companies.First().Name.Should().BeEquivalentTo(companyName);

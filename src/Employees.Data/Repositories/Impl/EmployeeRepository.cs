@@ -52,7 +52,7 @@ internal class EmployeeRepository : BaseRepository<Employee, EmployeeEntity>, IE
                 if (!addedEntry)
                 {
                     result = await base.AddAsync(model);
-                    addedEmployee = _context.Find<EmployeeEntity>(int.Parse(result.ChangeSet["Id"]))!;
+                    addedEmployee = _context.Find<EmployeeEntity>(result.GetId())!;
                     addedEntry = true;
                 }
 

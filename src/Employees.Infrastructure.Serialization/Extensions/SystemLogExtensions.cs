@@ -5,12 +5,9 @@ namespace Employees.Infrastructure.Extensions;
 
 public static class SystemLogExtensions
 {
-    public static IdResponse FormIdResponse(this SystemLog self)
-    {
-        var id = int.Parse(self.ChangeSet["Id"]);
-        return new IdResponse
+    public static IdResponse FormIdResponse(this SystemLog self) =>
+        new IdResponse
         {
-            Id = id,
+            Id = self.GetId(),
         };
-    }
 }

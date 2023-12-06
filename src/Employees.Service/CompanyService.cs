@@ -30,7 +30,7 @@ public class CompanyService : ICompanyService
             })?.ToList(),
         });
 
-        _logger.LogInformation($"Added new Company: {{ Id: {systemLog.ChangeSet["Id"]} }}");
+        _logger.LogInformation($"Added new Company: {{ Id: {systemLog.GetId()} }}");
 
         return systemLog;
     }

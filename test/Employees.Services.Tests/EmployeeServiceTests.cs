@@ -6,6 +6,7 @@ using Employees.Services.Contract;
 using Employees.Services.Extensions;
 using Employees.Shared.Enums;
 using Employees.Shared.Requests;
+using Employees.Domain.Model;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -58,6 +59,7 @@ public class EmployeeServiceTests : IClassFixture<DatabaseFixture>
         var employeeService = _serviceProvider.GetRequiredService<IEmployeeService>();
         var companyService = _serviceProvider.GetRequiredService<ICompanyService>();
         var employeeRepository = _serviceProvider.GetRequiredService<IEmployeeRepository>();
+        var companyRepository = _serviceProvider.GetRequiredService<ICompanyRepository>();
 
         AddCompanyRequest newCompanyRequest = new()
         {
@@ -68,7 +70,7 @@ public class EmployeeServiceTests : IClassFixture<DatabaseFixture>
         };
 
         var companyLog = await companyService.AddCompanyAsync(newCompanyRequest);
-        var companyId = int.Parse(companyLog.ChangeSet["Id"]);
+        var companyId = companyLog.GetId();
 
         AddEmployeeRequest newEmployeeRequest = new()
         {
@@ -82,11 +84,12 @@ public class EmployeeServiceTests : IClassFixture<DatabaseFixture>
 
         var employeeLog = await employeeService.AddEmployeeAsync(newEmployeeRequest);
         
-        var employeeId = int.Parse(employeeLog.ChangeSet["Id"]);
+        var employeeId = employeeLog.GetId();
         var employees = (await employeeRepository.GetAsync(new() { employeeId })).ToList();
         employees[0].Title.Should().Be(EmployeeTitle.Developer);
         employees[0].Email.Should().BeEquivalentTo("dev@domain.com");
 
         await employeeRepository.DeleteAsync(employeeId);
+        await companyRepository.DeleteAsync(companyId);
     }
 }

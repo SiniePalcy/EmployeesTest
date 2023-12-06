@@ -59,6 +59,7 @@ internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel, TE
             ?? throw new ObjectNotFoundException(id, typeof(TEntity));
         entity.IsDeleted = true;
         _context.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public virtual Task SaveAsync() => _context.SaveChangesAsync();
